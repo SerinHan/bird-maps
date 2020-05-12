@@ -6,10 +6,18 @@ class Bird {
             data: {
                 lat: lat,
                 lng: long,
-                sort: "species"
             },
             headers: { "X-eBirdApiToken": eBirdKey },
-            success: function (response) { console.log(response) }
+            success: this.displayBirds
         })
+    }
+    displayBirds(birds) {
+        var birdsContainer = document.getElementById("birds");
+
+        for (var i = 0; i < 10; i++) {
+            var bird = document.createElement("div");
+            bird.textContent = birds[i].sciName;
+            birdsContainer.append(bird);
+        }
     }
 }

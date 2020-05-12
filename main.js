@@ -29,10 +29,3 @@ function geocodeAddress(geocoder, resultsMap) {
         }
     });
 }
-
-var srcString = "https://maps.googleapis.com/maps/api/js?key=" + mapsKey + "&callback=initMap";
-var mapScript = document.createElement("script");
-mapScript.src = srcString;
-mapScript.defer = true;
-mapScript.async = true;
-document.querySelector("body").append(mapScript);
