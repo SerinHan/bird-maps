@@ -20,6 +20,10 @@ function geocodeAddress(geocoder, resultsMap) {
                 map: resultsMap,
                 position: results[0].geometry.location
             });
+            var lat = results[0].geometry.location.lat();
+            var long = results[0].geometry.location.lng();
+
+            eBird.getBirds(lat, long);
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
         }
