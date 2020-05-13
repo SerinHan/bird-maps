@@ -9,22 +9,32 @@
 </head>
 
 <body>
-    <div id="floating-panel">
-        <input id="address" type="textbox" value="Sydney, NSW">
-        <input id="submit" type="button" value="Geocode">
+    <div class="container">
+        <div class="map">
+            <header>
+                <h1>Bird Maps</h1>
+                <p>Enter a location or click on the map</p>
+            </header>
+
+            <div class="search-panel">
+                <input id="address" type="textbox">
+                <input id="submit" type="button" value="Search">
+            </div>
+
+            <div id="map"></div>
+        </div>
+
+        <div class="birds">
+            <h2>Recent Sightings</h2>
+
+            <div id="birds"></div>
+        </div>
     </div>
-
-    <div id="map"></div>
-
-    <div id="birds"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
     <script src="config.js"></script>
-    <script src="components/map.js"></script>
-    <script src="components/ebird.js"></script>
     <script src="main.js"></script>
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNiP5TfAAsDM - jLYk_iMdZCP9hvPaN2TU&callback=initMap"></script>
+
 </body>
 
 </html>
