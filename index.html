@@ -13,17 +13,20 @@
         <div class="map">
             <header>
                 <h1>Bird Maps</h1>
-                <p>Enter a location or click on the map</p>
+                <div class="search-panel">
+                    <p>Enter a location or click on the map: </p>
+                    <div>
+                        <input id="address" type="textbox">
+                        <input id="submit" type="button" value="Search">
+                    </div>
+                </div>
             </header>
 
-            <div class="search-panel">
-                <input id="address" type="textbox">
-                <input id="submit" type="button" value="Search">
-            </div>
-
             <div id="map"></div>
-        </div>
 
+            <p id="trackedBird"></p>
+        </div>
+        <div class="space"></div>
         <div class="birds">
             <h2>Recent Sightings</h2>
 

@@ -1,16 +1,26 @@
 body{
     background-color: whitesmoke;
 }
-h1{
+.search-panel{
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+}
+h1, h2{
     margin: 0;
 }
 .container{
     display: flex;
     width: 100%;
 }
-.map{
+.space{
     width: 50%;
+}
+.map{
     text-align: center;
+    position: fixed;
+    left: 2.5%;
+    width: 45%;
 }
 #map{
     height: 400px;
@@ -27,7 +37,6 @@ h1{
     padding: 2px;
     margin: 0 auto;
     width: 98%;
-    background-color: rgb(200, 200, 200);
     text-align: left;
 }
 .collapsible{
@@ -36,7 +45,7 @@ h1{
     color: white;
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 .collapsible img{

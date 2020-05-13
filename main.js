@@ -1,16 +1,23 @@
 var map;
-var marker;
+var mainMarker;
+var markers = [];
 var circle;
 var geocoder;
+var lat;
+var long;
 var body = document.querySelector("body");
-
+var birdsContainer = document.getElementById("birds");
+var mapContainer = document.querySelector(".map");
+var trackedBird = document.getElementById("trackedBird");
 var mapsScript = document.createElement("script");
 var scriptSrc = "https://maps.googleapis.com/maps/api/js?key=" + mapsKey + "&callback=initMap";
+var bounds;
+var loc;
+
 mapsScript.setAttribute("src", scriptSrc);
 mapsScript.async = true;
 mapsScript.defer = true;
 body.append(mapsScript);
-
 
 function initMap() {
     map = new google.maps.Map(
@@ -23,40 +30,7 @@ function initMap() {
     map.addListener('click', function (event) {
         addMarker(event.latLng);
     });
-}
-
-function addMarker(location) {
-    if (marker) {
-        deleteMarker(marker);
-    }
-    if (circle) {
-        deleteMarker(circle);
-    }
-    marker = new google.maps.Marker({
-        position: location,
-        map: map
-    });
-    map.setCenter(marker.position);
-    map.setZoom(7);
-    circle = new google.maps.Circle({
-        strokeColor: "#808080",
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: "#808080",
-        fillOpacity: 0.35,
-        map: map,
-        center: marker.position,
-        radius: 50000
-    });
-
-    var lat = marker.position.lat();
-    var long = marker.position.lng();
-    getBirds(lat, long);
-}
-
-function deleteMarker(marker) {
-    marker.setMap(null);
-    marker = null;
+    bounds = new google.maps.LatLngBounds();
 }
 
 function geocodeAddress(geocoder, resultsMap) {
@@ -71,7 +45,49 @@ function geocodeAddress(geocoder, resultsMap) {
     });
 }
 
-function getBirds(lat, long) {
+function addMarker(location) {
+    if (trackedBird.textContent) {
+        trackedBird.textContent = null;
+    }
+    if (markers.length > 0) {
+        for (var i = 0; i < markers.length; i++) {
+            deleteMarker(markers[i]);
+        }
+    }
+    if (mainMarker) {
+        deleteMarker(mainMarker);
+    }
+    if (circle) {
+        deleteMarker(circle);
+    }
+    mainMarker = new google.maps.Marker({
+        position: location,
+        map: map
+    });
+    map.setCenter(mainMarker.position);
+    map.setZoom(6);
+    circle = new google.maps.Circle({
+        strokeColor: "#808080",
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: "#808080",
+        fillOpacity: 0.35,
+        map: map,
+        center: mainMarker.position,
+        radius: 50000
+    });
+
+    lat = mainMarker.position.lat();
+    long = mainMarker.position.lng();
+    getBirds(lat, long);
+}
+
+function deleteMarker(marker) {
+    marker.setMap(null);
+    marker = null;
+}
+
+function getBirds() {
     $.ajax({
         url: "https://api.ebird.org/v2/data/obs/geo/recent",
         method: "GET",
@@ -79,29 +95,35 @@ function getBirds(lat, long) {
             lat: lat,
             lng: long,
             dist: 50,
-            maxResults: 9
+            maxResults: 20
         },
         headers: { "X-eBirdApiToken": eBirdKey },
         success: displayBirds
     })
 }
 function displayBirds(birds) {
-    var birdsContainer = document.getElementById("birds");
-
     while (birdsContainer.firstChild) {
         birdsContainer.removeChild(birdsContainer.lastChild);
     }
 
     if (birds.length > 1) {
-        for (var i = 0; i < 9; i++) {
+        for (var i = 0; i < birds.length; i++) {
             var bird = document.createElement("div");
             var icon = document.createElement("button");
             var name = document.createElement("p");
+            var allSightings = document.createElement("button");
+
             bird.setAttribute("class", "bird");
-            icon.setAttribute("class", "icon collapsible");
-            name.textContent = birds[i].comName;
-            icon.append(name);
+            icon.setAttribute("class", "collapsible");
+
+            allSightings.addEventListener("click", getSightings);
+
             bird.append(icon);
+            icon.append(allSightings, name);
+            name.textContent = birds[i].comName;
+            allSightings.textContent = "Sightings";
+            allSightings.value = birds[i].speciesCode;
+
             birdsContainer.append(bird);
             search(birds[i].sciName, bird, icon);
         }
@@ -111,6 +133,21 @@ function displayBirds(birds) {
         birdsContainer.append(message);
     }
 
+    var collapsible = document.querySelectorAll(".collapsible");
+    for (var i = 0; i < collapsible.length; i++) {
+        collapsible[i].addEventListener("click", function () {
+            if (event.target.value) {
+                return;
+            }
+            this.classList.toggle("active");
+            var info = this.nextElementSibling;
+            if (info.style.display === "none") {
+                info.style.display = "block";
+            } else {
+                info.style.display = "none";
+            }
+        })
+    }
 }
 function search(birdName, bird, icon) {
     $.ajax({
@@ -150,19 +187,6 @@ function displayImage(source, icon) {
     var image = document.createElement("img");
     image.setAttribute("src", source);
     icon.append(image);
-
-    var collapsible = document.querySelectorAll(".collapsible");
-    for (var i = 0; i < collapsible.length; i++) {
-        collapsible[i].addEventListener("click", function () {
-            this.classList.toggle("active");
-            var info = this.nextElementSibling;
-            if (info.style.display !== "none") {
-                info.style.display = "none";
-            } else {
-                info.style.display = "block";
-            }
-        })
-    }
 }
 function getExtract(title, id, bird) {
     $.ajax({
@@ -201,4 +225,38 @@ function displayExtract(title, extract, bird) {
     info.insertAdjacentHTML("afterbegin", extract);
     info.append(learnMore);
     bird.append(info);
+}
+function getSightings(event) {
+    var code = event.target.value;
+    $.ajax({
+        url: "https://api.ebird.org/v2/data/nearest/geo/recent/" + code,
+        data: {
+            lat: lat,
+            lng: long,
+        },
+        headers: { "X-eBirdApiToken": eBirdKey },
+        success: displaySightings
+    })
+}
+function displaySightings(response) {
+    if (markers.length > 0) {
+        for (var i = 0; i < markers.length; i++) {
+            deleteMarker(markers[i]);
+        }
+        bounds = new google.maps.LatLngBounds();
+    }
+
+    for (var i = 0; i < response.length; i++) {
+        var sighting = new google.maps.Marker({
+            position: { lat: response[i].lat, lng: response[i].lng },
+            map: map
+        });
+        markers.push(sighting);
+        loc = new google.maps.LatLng(sighting.position.lat(), sighting.position.lng());
+        bounds.extend(loc);
+    }
+    trackedBird.textContent = response[0].comName;
+
+    map.fitBounds(bounds);
+    map.panToBounds(bounds);
 }
