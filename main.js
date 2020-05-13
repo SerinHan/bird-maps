@@ -7,9 +7,13 @@ var lat;
 var long;
 var body = document.querySelector("body");
 var birdsContainer = document.getElementById("birds");
-
+var mapContainer = document.querySelector(".map");
+var trackedBird = document.getElementById("trackedBird");
 var mapsScript = document.createElement("script");
 var scriptSrc = "https://maps.googleapis.com/maps/api/js?key=" + mapsKey + "&callback=initMap";
+var bounds;
+var loc;
+
 mapsScript.setAttribute("src", scriptSrc);
 mapsScript.async = true;
 mapsScript.defer = true;
@@ -26,6 +30,7 @@ function initMap() {
     map.addListener('click', function (event) {
         addMarker(event.latLng);
     });
+    bounds = new google.maps.LatLngBounds();
 }
 
 function geocodeAddress(geocoder, resultsMap) {
@@ -41,6 +46,9 @@ function geocodeAddress(geocoder, resultsMap) {
 }
 
 function addMarker(location) {
+    if (trackedBird.textContent) {
+        trackedBird.textContent = null;
+    }
     if (markers.length > 0) {
         for (var i = 0; i < markers.length; i++) {
             deleteMarker(markers[i]);
@@ -57,7 +65,7 @@ function addMarker(location) {
         map: map
     });
     map.setCenter(mainMarker.position);
-    map.setZoom(7);
+    map.setZoom(6);
     circle = new google.maps.Circle({
         strokeColor: "#808080",
         strokeOpacity: 0.8,
@@ -87,7 +95,7 @@ function getBirds() {
             lat: lat,
             lng: long,
             dist: 50,
-            maxResults: 9
+            maxResults: 20
         },
         headers: { "X-eBirdApiToken": eBirdKey },
         success: displayBirds
@@ -99,7 +107,7 @@ function displayBirds(birds) {
     }
 
     if (birds.length > 1) {
-        for (var i = 0; i < 9; i++) {
+        for (var i = 0; i < birds.length; i++) {
             var bird = document.createElement("div");
             var icon = document.createElement("button");
             var name = document.createElement("p");
@@ -123,6 +131,22 @@ function displayBirds(birds) {
         var message = document.createElement("p");
         message.textContent = "No recent sightings nearby (50km radius)";
         birdsContainer.append(message);
+    }
+
+    var collapsible = document.querySelectorAll(".collapsible");
+    for (var i = 0; i < collapsible.length; i++) {
+        collapsible[i].addEventListener("click", function () {
+            if (event.target.value) {
+                return;
+            }
+            this.classList.toggle("active");
+            var info = this.nextElementSibling;
+            if (info.style.display === "none") {
+                info.style.display = "block";
+            } else {
+                info.style.display = "none";
+            }
+        })
     }
 }
 function search(birdName, bird, icon) {
@@ -163,19 +187,6 @@ function displayImage(source, icon) {
     var image = document.createElement("img");
     image.setAttribute("src", source);
     icon.append(image);
-
-    var collapsible = document.querySelectorAll(".collapsible");
-    for (var i = 0; i < collapsible.length; i++) {
-        collapsible[i].addEventListener("click", function () {
-            this.classList.toggle("active");
-            var info = this.nextElementSibling;
-            if (info.style.display !== "none") {
-                info.style.display = "none";
-            } else {
-                info.style.display = "block";
-            }
-        })
-    }
 }
 function getExtract(title, id, bird) {
     $.ajax({
@@ -232,6 +243,7 @@ function displaySightings(response) {
         for (var i = 0; i < markers.length; i++) {
             deleteMarker(markers[i]);
         }
+        bounds = new google.maps.LatLngBounds();
     }
 
     for (var i = 0; i < response.length; i++) {
@@ -240,6 +252,11 @@ function displaySightings(response) {
             map: map
         });
         markers.push(sighting);
+        loc = new google.maps.LatLng(sighting.position.lat(), sighting.position.lng());
+        bounds.extend(loc);
     }
-    map.setZoom(5);
+    trackedBird.textContent = response[0].comName;
+
+    map.fitBounds(bounds);
+    map.panToBounds(bounds);
 }
