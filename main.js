@@ -8,7 +8,11 @@ var long;
 var body = document.querySelector("body");
 var birdsContainer = document.getElementById("birds");
 var mapContainer = document.querySelector(".map");
+var tracking = document.getElementById("tracking");
 var trackedBird = document.getElementById("trackedBird");
+var clearButton = document.getElementById("clear");
+clearButton.addEventListener("click", clearSightings);
+
 var mapsScript = document.createElement("script");
 var scriptSrc = "https://maps.googleapis.com/maps/api/js?key=" + mapsKey + "&callback=initMap";
 var bounds;
@@ -95,7 +99,7 @@ function getBirds() {
             lat: lat,
             lng: long,
             dist: 50,
-            maxResults: 20
+            maxResults: 50
         },
         headers: { "X-eBirdApiToken": eBirdKey },
         success: displayBirds
@@ -114,6 +118,8 @@ function displayBirds(birds) {
             var allSightings = document.createElement("button");
 
             bird.setAttribute("class", "bird");
+            bird.setAttribute("class", birds[i].comName);
+
             icon.setAttribute("class", "collapsible");
 
             allSightings.addEventListener("click", getSightings);
@@ -256,7 +262,31 @@ function displaySightings(response) {
         bounds.extend(loc);
     }
     trackedBird.textContent = response[0].comName;
+    clearButton.classList.remove("hidden");
+
+    for (var i = 0; i < birdsContainer.childElementCount; i++) {
+        if (birdsContainer.children[i].classList.contains("tracked")) {
+            birdsContainer.children[i].classList.remove("tracked");
+        }
+        if (birdsContainer.children[i].className === response[0].comName) {
+            birdsContainer.children[i].classList.add("tracked");
+        }
+    }
 
     map.fitBounds(bounds);
     map.panToBounds(bounds);
+}
+function clearSightings() {
+    if (markers.length > 0) {
+        for (var i = 0; i < markers.length; i++) {
+            deleteMarker(markers[i]);
+        }
+    }
+    trackedBird.textContent = null;
+    this.classList.add("hidden");
+    for (var i = 0; i < birdsContainer.childElementCount; i++) {
+        if (birdsContainer.children[i].classList.contains("tracked")) {
+            birdsContainer.children[i].classList.remove("tracked");
+        }
+    }
 }
