@@ -68,3 +68,6 @@ a:hover{
 .tracked{
     border: 5px solid rgb(50, 50, 50);
 }
+.hidden{
+    display: none;
+}
