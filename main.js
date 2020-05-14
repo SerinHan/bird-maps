@@ -95,7 +95,7 @@ function getBirds() {
             lat: lat,
             lng: long,
             dist: 50,
-            maxResults: 20
+            maxResults: 50
         },
         headers: { "X-eBirdApiToken": eBirdKey },
         success: displayBirds
@@ -114,6 +114,8 @@ function displayBirds(birds) {
             var allSightings = document.createElement("button");
 
             bird.setAttribute("class", "bird");
+            bird.setAttribute("class", birds[i].comName);
+
             icon.setAttribute("class", "collapsible");
 
             allSightings.addEventListener("click", getSightings);
@@ -256,6 +258,15 @@ function displaySightings(response) {
         bounds.extend(loc);
     }
     trackedBird.textContent = response[0].comName;
+
+    for (var i = 0; i < birdsContainer.childElementCount; i++) {
+        if (birdsContainer.children[i].classList.contains("tracked")) {
+            birdsContainer.children[i].classList.remove("tracked");
+        }
+        if (birdsContainer.children[i].className === response[0].comName) {
+            birdsContainer.children[i].classList.add("tracked");
+        }
+    }
 
     map.fitBounds(bounds);
     map.panToBounds(bounds);
