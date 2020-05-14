@@ -8,6 +8,7 @@ var long;
 var body = document.querySelector("body");
 var birdsContainer = document.getElementById("birds");
 var mapContainer = document.querySelector(".map");
+var title = document.getElementById("title");
 var tracking = document.getElementById("tracking");
 var trackedBird = document.getElementById("trackedBird");
 var clearButton = document.getElementById("clear");
@@ -99,13 +100,14 @@ function getBirds() {
             lat: lat,
             lng: long,
             dist: 50,
-            maxResults: 50
+            maxResults: 30
         },
         headers: { "X-eBirdApiToken": eBirdKey },
         success: displayBirds
     })
 }
 function displayBirds(birds) {
+    title.classList.remove("hidden");
     while (birdsContainer.firstChild) {
         birdsContainer.removeChild(birdsContainer.lastChild);
     }
