@@ -2,6 +2,9 @@ body{
     background-color: rgb(216, 216, 207);
     font-family: "Source Code Pro", monospace;
 }
+.container{
+    display: flex;
+}
 p, 
 button, 
 input{
@@ -16,13 +19,6 @@ h1, h2{
     margin: 10px 0;
     font-family: "Lexend Deca", sans-serif;
     font-weight: 400;
-}
-.container{
-    display: flex;
-    width: 100%;
-}
-.space{
-    width: 50%;
 }
 .map{
     text-align: center;
@@ -39,7 +35,7 @@ h1, h2{
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    height: 90vh;
+    height: 85vh;
     margin-right: 5px;
 }
 .info{
@@ -72,7 +68,7 @@ a{
     color: black;
     text-decoration: none;
     padding: 2px;
-    font-weight: 500;
+    font-weight: 700;
 }
 a:hover{
     color: gray;
@@ -94,12 +90,12 @@ button{
 button:hover{
     background-color: rgb(158, 189, 161);
 }
-.hidden{
-    display: none;
-}
 .birdImages{
     width: 50px;
     height: 50px;
     object-fit: cover;
     border-radius: 50%;
+}
+.hidden{
+    display: none;
 }
