@@ -84,7 +84,7 @@ function addMarker(location) {
 
     lat = mainMarker.position.lat();
     long = mainMarker.position.lng();
-    getBirds(lat, long);
+    getBirds();
 }
 
 function deleteMarker(marker) {
@@ -121,6 +121,7 @@ function displayBirds(birds) {
 
             bird.setAttribute("class", "bird");
             bird.setAttribute("class", birds[i].comName);
+            bird.style.marginBottom = "6px";
 
             icon.setAttribute("class", "collapsible");
 
@@ -194,6 +195,7 @@ function getImage(title, id, icon) {
 function displayImage(source, icon) {
     var image = document.createElement("img");
     image.setAttribute("src", source);
+    image.setAttribute("class", "birdImages");
     icon.append(image);
 }
 function getExtract(title, id, bird) {

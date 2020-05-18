@@ -1,6 +1,11 @@
 body{
-    background-color: whitesmoke;
-    font-family: "Poppins", sans-serif
+    background-color: rgb(216, 216, 207);
+    font-family: "Source Code Pro", monospace;
+}
+p, 
+button, 
+input{
+    font-family: "Lexend Deca", sans-serif;
 }
 .search-panel{
     display: flex;
@@ -8,7 +13,9 @@ body{
     align-items: baseline;
 }
 h1, h2{
-    margin: 0;
+    margin: 10px 0;
+    font-family: "Lexend Deca", sans-serif;
+    font-weight: 400;
 }
 .container{
     display: flex;
@@ -43,11 +50,15 @@ h1, h2{
 .collapsible{
     outline: none;
     background-color: rgb(125, 125, 125);
+    border-radius: 8px;
     color: white;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-style: none;
 }
 .collapsible img{
     margin: 0.25rem;
@@ -66,8 +77,25 @@ a:hover{
     color: gray;
 }
 .tracked{
-    border: 5px solid rgb(50, 50, 50);
+    border: 5px solid rgb(39, 83, 44);
+    border-radius: 12px;
+}
+input{
+    border-radius: 6px;
+    border-style: none;
+}
+button{
+    border-radius: 6px;
+    padding: 5px 10px;
+    background-color: rgb(189, 230, 194);
+    border-style: none;
 }
 .hidden{
     display: none;
+}
+.birdImages{
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
 }
