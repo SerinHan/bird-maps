@@ -90,6 +90,9 @@ button{
     background-color: rgb(189, 230, 194);
     border-style: none;
 }
+button:hover{
+    background-color: rgb(158, 189, 161);
+}
 .hidden{
     display: none;
 }
