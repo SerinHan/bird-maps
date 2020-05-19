@@ -119,8 +119,8 @@ function displayBirds(birds) {
             var name = document.createElement("p");
             var allSightings = document.createElement("button");
 
-            bird.setAttribute("class", "bird");
             bird.setAttribute("class", birds[i].comName);
+            bird.classList.add("bird");
             bird.style.marginBottom = "6px";
 
             icon.setAttribute("class", "collapsible");
