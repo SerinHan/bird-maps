@@ -152,6 +152,7 @@ function displayBirds(birds) {
     } else {
         var message = document.createElement("p");
         message.textContent = "No recent sightings nearby (50km radius)";
+        message.className = "noSightings"
         birdsContainer.append(message);
     }
 

@@ -10,6 +10,7 @@ input{
     margin: 0;
     font-family: "Lexend Deca", sans-serif;
     font-weight: 400;
+    font-size: 16px;
 }
 header h1,
 .search-panel p,
@@ -50,10 +51,11 @@ input{
 }
 .birdSightings{
     display: flex;
-    flex-direction: column;
     overflow-y: auto;
-    height: 85vh;
     margin-right: 5px;
+}
+.noSightings{
+    margin: 0 auto;
 }
 .info{
     margin: 0 auto;
@@ -91,7 +93,9 @@ a:hover{
     border: 5px solid rgb(39, 83, 44);
     border-radius: 12px;
 }
-
+.trackedBird{
+    margin-right: 5px;
+}
 button{
     border-radius: 6px;
     padding: 15px 10px;
@@ -110,13 +114,19 @@ button:hover{
 .hidden{
     display: none;
 }
+.mobile{
+    display: flex;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+}
 .loader {
-    margin: 5rem auto;
-    border: 12px solid rgb(150, 150, 150);
-    border-top: 12px solid rgb(39, 83, 44);
+    margin: 2.5rem auto;
+    border: 3px solid rgb(150, 150, 150);
+    border-top: 3px solid rgb(39, 83, 44);
     border-radius: 50%;
-    width: 120px;
-    height: 120px;
+    width: 30px;
+    height: 30px;
     animation: spin 2s linear infinite;
   }
   @-webkit-keyframes spin {
@@ -137,7 +147,16 @@ button:hover{
     }
     .birdSightings{
         flex-direction: column;
-        height: 90vh;
+        height: 85vh;
+    }
+    .loader{
+        margin: 5rem;
+        width: 120px;
+        height: 120px;
+        border-width: 12px;
+    }
+    .mobile{
+        display: block;
     }
 }
 
