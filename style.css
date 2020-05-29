@@ -48,15 +48,12 @@ input{
 .birds{
     text-align: center;
 }
-#birds{
-    display: flex;    
-    overflow: auto;
-    margin: 5px;
-}
-.bird{
-    flex: 0 0 auto;
-    width: 100%;
-    margin-right: 2.5px;
+.birdSightings{
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    height: 85vh;
+    margin-right: 5px;
 }
 .info{
     margin: 0 auto;
@@ -113,6 +110,23 @@ button:hover{
 .hidden{
     display: none;
 }
+.loader {
+    margin: 5rem auto;
+    border: 12px solid rgb(150, 150, 150);
+    border-top: 12px solid rgb(39, 83, 44);
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+  }
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  @keyframes spin {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+  }
 
 @media only screen and (min-width: 1000px) {
     .container{
@@ -121,8 +135,9 @@ button:hover{
     .map, .birds{
         width: 50%;
     }
-    #birds{
+    .birdSightings{
         flex-direction: column;
         height: 90vh;
     }
 }
+
