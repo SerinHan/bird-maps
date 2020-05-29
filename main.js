@@ -12,6 +12,7 @@ var title = document.getElementById("title");
 var tracking = document.getElementById("tracking");
 var trackedBird = document.getElementById("trackedBird");
 var clearButton = document.getElementById("clear");
+var loader = document.getElementById("loader");
 clearButton.addEventListener("click", clearSightings);
 
 var mapsScript = document.createElement("script");
@@ -102,12 +103,24 @@ function getBirds() {
             dist: 50,
             maxResults: 30
         },
+        beforeSend: () => {
+            if (!title.classList.contains("hidden")) {
+                title.classList.add("hidden");
+            }
+            if (!birdsContainer.classList.contains("hidden")) {
+                birdsContainer.classList.add("hidden");
+            }
+            loader.classList.remove("hidden");
+        },
         headers: { "X-eBirdApiToken": eBirdKey },
         success: displayBirds
     })
 }
 function displayBirds(birds) {
+    birdsContainer.classList.remove("hidden");
+    loader.classList.add("hidden");
     title.classList.remove("hidden");
+
     while (birdsContainer.firstChild) {
         birdsContainer.removeChild(birdsContainer.lastChild);
     }
