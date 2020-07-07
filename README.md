@@ -1,5 +1,8 @@
 # bird-maps
-A hackathon project created utilizing the data of three public APIs
+A web application for bird watchers who want to learn about birds sighted around the world.
+
+## Live Demo
+Try the application live at [https://bird-maps.serinhan.com]
 
 ## Technologies Used
 - HTML5
@@ -7,9 +10,6 @@ A hackathon project created utilizing the data of three public APIs
 - JavaScript
 - Ajax
 - AWS EC2
-
-## Live Demo
-Try the application live at [https://bird-maps.serinhan.com]
 
 ## Features
 - User can select a location on map
